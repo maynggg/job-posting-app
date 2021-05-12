@@ -1,0 +1,50 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  _id: String!
+  username: String!
+  role: String!
+  name: String!
+  company: Company!
+  companyId: String!
+}
+
+type Vacancy {
+  _id: String!
+  title: String!
+  description: String!
+  expiredAt: String!
+  company: Company!
+  companyId: String!
+}
+
+type Company {
+  _id: String!
+  name: String!
+  address: String!
+  users: [User!]!
+  vacancies: [Vacancy!]!
+}
+
+type AccessToken {
+  accessToken: String!
+}
+
+type Query {
+  company(id: String!): Company!
+  companies: [Company!]!
+  user(id: String!): User!
+  me: User!
+  users: [User!]!
+  vacancy(id: String!): Vacancy!
+  vacancies: [Vacancy!]!
+}
+
+type Mutation {
+  createVacancy(title: String!, description: String!, expiredAt: String!, companyId: String!): Vacancy!
+  updateVacancy(title: String, description: String, expiredAt: String, vacancyId: String!, companyId: String!): Vacancy!
+  deleteVacancy(vacancyId: String!, companyId: String!): Vacancy!
+  login(username: String!, password: String!): AccessToken!
+}
