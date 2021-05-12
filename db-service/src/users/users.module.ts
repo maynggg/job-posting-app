@@ -4,22 +4,24 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { usersProviders } from './users.providers';
 import { UsersService } from './users.service';
-import { DatabaseModule } from '../database/database.module';
+import { MongooseModule } from '@nestjs/mongoose';
 import { UsersController } from './users.controller';
 import { AuthMiddleware } from './auth.middleware';
+import { User, UserSchema } from './schemas/user.schema';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+  ],
   controllers: [UsersController],
-  providers: [UsersService, ...usersProviders],
+  providers: [UsersService],
   exports: [UsersService],
 })
 export class UsersModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .forRoutes({ path: 'users', method: RequestMethod.GET });
+      .forRoutes({ path: 'users*', method: RequestMethod.GET });
   }
 }

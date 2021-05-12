@@ -1,8 +1,8 @@
+import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { VacanciesController } from './vacancies.controller';
 import { VacanciesService } from './vacancies.service';
-
-class VacancyProviderFake {}
+import { Vacancy } from './schemas/vacancy.schema';
 
 describe('VacanciesController', () => {
   let controller: VacanciesController;
@@ -14,8 +14,8 @@ describe('VacanciesController', () => {
       providers: [
         VacanciesService,
         {
-          provide: 'VACANCY_MODEL',
-          useClass: VacancyProviderFake,
+          provide: getModelToken(Vacancy.name),
+          useValue: null,
         },
       ],
     }).compile();
@@ -52,8 +52,11 @@ describe('VacanciesController', () => {
         expiredAt: new Date(),
       };
 
+      const vacancyId = '12345';
+
       service.findById = jest.fn().mockResolvedValueOnce(vacancy);
-      expect(await controller.findById('id')).toBe(vacancy);
+      expect(await controller.findById(vacancyId)).toBe(vacancy);
+      expect(service.findById).toBeCalledWith(vacancyId);
     });
   });
 });

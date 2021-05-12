@@ -1,14 +1,14 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { CreateCompanyDto } from './dto/create-company.dto';
-import { Company } from './interfaces/company.interface';
+import { Company, CompanyDocument } from './schemas/company.schema';
 
 @Injectable()
 export class CompaniesService {
   constructor(
-    @Inject('COMPANY_MODEL')
-    private companyModel: Model<Company>,
+    @InjectModel(Company.name) private companyModel: Model<CompanyDocument>,
   ) {}
 
   async create(createCompanyDto: CreateCompanyDto): Promise<Company> {
@@ -17,10 +17,10 @@ export class CompaniesService {
   }
 
   async findAll(): Promise<Company[]> {
-    return this.companyModel.find().exec();
+    return this.companyModel.find();
   }
 
   async findById(id: string): Promise<Company> {
-    return this.companyModel.findById(id).exec();
+    return this.companyModel.findById(id);
   }
 }

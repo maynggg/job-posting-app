@@ -5,17 +5,21 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { CompaniesController } from './companies.controller';
-import { companiesProviders } from './companies.providers';
-import { DatabaseModule } from '../database/database.module';
 import { CompaniesService } from './companies.service';
 import { AuthMiddleware } from '../users/auth.middleware';
 import { UsersModule } from '../users/users.module';
 import { VacanciesModule } from '../vacancies/vacancies.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Company, CompanySchema } from './schemas/company.schema';
 
 @Module({
-  imports: [DatabaseModule, UsersModule, VacanciesModule],
+  imports: [
+    MongooseModule.forFeature([{ name: Company.name, schema: CompanySchema }]),
+    UsersModule,
+    VacanciesModule,
+  ],
   controllers: [CompaniesController],
-  providers: [CompaniesService, ...companiesProviders],
+  providers: [CompaniesService],
 })
 export class CompaniesModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {

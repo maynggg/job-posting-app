@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { VacanciesService } from './vacancies.service';
-import { Vacancy } from './interfaces/vacancy.interface';
+import { Vacancy } from './schemas/vacancy.schema';
 
 @Controller('vacancies')
 export class VacanciesController {

@@ -4,7 +4,7 @@ import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { User } from './interfaces/user.interface';
+import { User } from './schemas/user.schema';
 
 @Controller('users')
 export class UsersController {

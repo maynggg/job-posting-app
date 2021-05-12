@@ -1,16 +1,16 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
-import { Vacancy } from './interfaces/vacancy.interface';
+import { Vacancy, VacancyDocument } from './schemas/vacancy.schema';
 import { CreateVacancyDto } from './dto/create-vacancy.dto';
 import { UpdateVacancyDto } from './dto/update-vacancy.dto';
 import * as mongoose from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class VacanciesService {
   constructor(
-    @Inject('VACANCY_MODEL')
-    private vacancyModel: Model<Vacancy>,
+    @InjectModel(Vacancy.name) private vacancyModel: Model<VacancyDocument>,
   ) {}
 
   async create(
@@ -25,31 +25,29 @@ export class VacanciesService {
   }
 
   async findAll(): Promise<Vacancy[]> {
-    return this.vacancyModel.find().exec();
+    return this.vacancyModel.find();
   }
 
   async findById(id: string): Promise<Vacancy> {
-    return this.vacancyModel.findById(id).exec();
+    return this.vacancyModel.findById(id);
   }
 
   async update(
     id: string,
     updateVacancyDto: UpdateVacancyDto,
   ): Promise<Vacancy> {
-    const toUpdate = this.vacancyModel.findById(id).exec();
-    return this.vacancyModel
-      .findOneAndUpdate(toUpdate, updateVacancyDto, {
-        new: true,
-      })
-      .exec();
+    const toUpdate = this.vacancyModel.findById(id);
+    return this.vacancyModel.findOneAndUpdate(toUpdate, updateVacancyDto, {
+      new: true,
+    });
   }
 
   async remove(id: string): Promise<Vacancy> {
-    return this.vacancyModel.findByIdAndDelete(id).exec();
+    return this.vacancyModel.findByIdAndDelete(id);
   }
 
   async findByCompanyId(companyId: string): Promise<Vacancy[]> {
     const query: any = { companyId: new mongoose.Types.ObjectId(companyId) };
-    return await this.vacancyModel.find(query).exec();
+    return await this.vacancyModel.find(query);
   }
 }

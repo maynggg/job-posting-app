@@ -1,15 +1,20 @@
+import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CompaniesService } from './companies.service';
-import { companiesProviders } from './companies.providers';
-import { DatabaseModule } from '../database/database.module';
+import { Company } from './schemas/company.schema';
 
 describe('CompaniesService', () => {
   let service: CompaniesService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DatabaseModule],
-      providers: [CompaniesService, ...companiesProviders],
+      providers: [
+        CompaniesService,
+        {
+          provide: getModelToken(Company.name),
+          useValue: null,
+        },
+      ],
     }).compile();
 
     service = module.get<CompaniesService>(CompaniesService);

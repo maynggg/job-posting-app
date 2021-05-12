@@ -6,15 +6,18 @@ import {
 } from '@nestjs/common';
 import { VacanciesService } from './vacancies.service';
 import { VacanciesController } from './vacancies.controller';
-import { vacanciesProviders } from './vacancies.providers';
-import { DatabaseModule } from '../database/database.module';
 import { AuthMiddleware } from '../users/auth.middleware';
 import { UsersModule } from '../users/users.module';
+import { Vacancy, VacancySchema } from './schemas/vacancy.schema';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [DatabaseModule, UsersModule],
+  imports: [
+    MongooseModule.forFeature([{ name: Vacancy.name, schema: VacancySchema }]),
+    UsersModule,
+  ],
   controllers: [VacanciesController],
-  providers: [VacanciesService, ...vacanciesProviders],
+  providers: [VacanciesService],
   exports: [VacanciesService],
 })
 export class VacanciesModule implements NestModule {

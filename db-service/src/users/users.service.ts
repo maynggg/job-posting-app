@@ -1,12 +1,12 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { HttpStatus } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from './schemas/user.schema';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { User } from './interfaces/user.interface';
 
 import * as jwt from 'jsonwebtoken';
 import * as pw from './password';
@@ -16,10 +16,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'THIS_IS_A_SECRET';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @Inject('USER_MODEL')
-    private userModel: Model<User>,
-  ) {}
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { companyId, name, username, password, role } = createUserDto;

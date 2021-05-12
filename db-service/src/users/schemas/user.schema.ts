@@ -1,40 +1,31 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { Document } from 'mongoose';
 
-const Role = {
-  ADMIN: 'admin',
-  USER: 'user',
-};
+export type UserDocument = User & Document;
 
-const UserSchema = new mongoose.Schema({
-  companyId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Company',
-  },
-  name: String,
-  username: {
-    type: String,
-    index: { unique: true },
-  },
-  passwordHash: {
-    type: String,
-    required: true,
-  },
-  passwordSalt: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    enum: [Role.ADMIN, Role.USER],
-  },
-});
+@Schema()
+export class User {
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  _id: string;
 
-UserSchema.methods.toJSON = function toJSON() {
-  const obj = this.toObject();
-  delete (obj as any).passwordHash;
-  delete (obj as any).passwordSalt;
-  delete obj.__v;
-  return obj;
-};
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Company' })
+  companyId: string;
 
-export { UserSchema };
+  @Prop()
+  username: string;
+
+  @Prop()
+  name: string;
+
+  @Prop()
+  passwordHash: string;
+
+  @Prop()
+  passwordSalt: string;
+
+  @Prop()
+  role: string;
+}
+
+export const UserSchema = SchemaFactory.createForClass(User);
