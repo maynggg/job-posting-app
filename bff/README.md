@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository for the BFF microservices.
 
 ## Installation
 
@@ -102,7 +102,7 @@ $ npm run test:cov
 
 5. `GET /users/me`
 - Authentication required. 
-- Return information of the logged in user.
+- Return information of this user.
 
 #### Vacancies
 1. `GET /vacancies`

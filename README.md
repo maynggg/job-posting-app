@@ -14,7 +14,7 @@ This project aims to replicate basic functionalities of a job posting web applic
 3. Create a `.env` file and add the necessary environment variables. See `.env.example` for example.
 4. Run the development server and web app by running this command: `$ docker-compose -f dev-docker-compose.yml up --build`
 5. The web app and server will be available based on your chosen ports.
-6. Make a `POST` request to the following URL to generate seed data: `http://<DB_SERVICE_BASE_URL>:<DB_SERVICE_PORT>/seed`. CAUTION: doing this will drop the database and recreate  the seed data. Seed data can be viewed in `db-service/app.controller.ts`.
+6. Make a `POST` request to the following URL to generate seed data: `http://<DB_SERVICE_BASE_URL>:<DB_SERVICE_PORT>/seed`. CAUTION: doing this will drop the database and recreate  the seed data. Seed data can be viewed in `db-service/src/app.controller.ts`.
 
 ## Project Structure
 Two microservices were built for this application: 

@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository for the REST API microservices.
 
 ## Installation
 
@@ -116,7 +116,7 @@ $ npm run test:cov
 
 2. `GET /companies/:id`
 - Authentication required. 
-- Return a company with the specified ID.
+- Return a Company with the specified ID.
 
 3. `GET /companies/:companyId/users`
 - Authentication required. 
@@ -163,9 +163,9 @@ $ npm run test:cov
 
 7. `POST /companies`
 - Authentication required.
-- Create a company.
+- Create a Company.
 - Required fields: name, address.
-- Return a company.
+- Return a Company.
 - Sample request body: 
     ```bash
     {
