@@ -155,13 +155,13 @@ $ npm run test:cov
     }
     ```
 
-6. `DELETE /companies/:companyId/vacancies/:vacancyId`
+7. `DELETE /companies/:companyId/vacancies/:vacancyId`
 - Authentication required.
 - Authorization required (User role must be 'admin').
 - Return a Vacancy.
 - Delete a specified job vacancy within a specified company.
 
-7. `POST /companies`
+8. `POST /companies`
 - Authentication required.
 - Create a Company.
 - Required fields: name, address.
