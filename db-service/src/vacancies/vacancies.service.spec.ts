@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { VacanciesService } from './vacancies.service';
 import { Vacancy, VacancyDocument } from './schemas/vacancy.schema';
-import { CreateVacancyDto } from './dto/create-vacancy.dto';
 import { UpdateVacancyDto } from './dto/update-vacancy.dto';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';

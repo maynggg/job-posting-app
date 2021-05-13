@@ -49,16 +49,16 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    return this.userModel.find();
   }
 
   async findByCompanyId(companyId: string): Promise<User[]> {
     const query: any = { companyId: new mongoose.Types.ObjectId(companyId) };
-    return await this.userModel.find(query).exec();
+    return await this.userModel.find(query);
   }
 
   async findById(id: string): Promise<User> {
-    return this.userModel.findById(id).exec();
+    return this.userModel.findById(id);
   }
 
   async checkLoginDetail(loginUserDto: LoginUserDto): Promise<User> {
