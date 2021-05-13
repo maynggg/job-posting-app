@@ -32,7 +32,6 @@ export class UsersController {
 
     return {
       accessToken,
-      user,
     };
   }
 

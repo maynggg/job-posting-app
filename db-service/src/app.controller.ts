@@ -89,6 +89,7 @@ export class AppController {
 
       users[i].passwordHash = hash;
       users[i].passwordSalt = salt;
+      delete users[i].password;
     }
 
     await userCollection.insertMany(users);
@@ -102,7 +103,7 @@ export class AppController {
       'expiredAt': '2021-10-10T10:36:40.791Z',
     },
     {
-      _id: ObjectID('609ce166592baf004d24e6bc'),
+      _id: ObjectID('609ce166592baf004d24e6bd'),
       'companyId': '5e5df7fc6953acd3dc50fe8a',
       'title': 'Backend Developer',
       'description': 'Backend development',

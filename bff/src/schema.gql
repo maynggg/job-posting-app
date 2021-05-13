@@ -43,6 +43,7 @@ type Query {
 }
 
 type Mutation {
+  createCompany(name: String!, address: String!): Company!
   createVacancy(title: String!, description: String!, expiredAt: String!, companyId: String!): Vacancy!
   updateVacancy(title: String, description: String, expiredAt: String, vacancyId: String!, companyId: String!): Vacancy!
   deleteVacancy(vacancyId: String!, companyId: String!): Vacancy!

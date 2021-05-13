@@ -24,6 +24,7 @@ export class UsersService {
     const user = await this.userModel.findOne({
       username: username,
     });
+
     if (user) {
       const errors = { username: 'Username must be unique.' };
       throw new HttpException(
@@ -66,7 +67,7 @@ export class UsersService {
 
     const user = await this.userModel.findOne({
       username: username,
-    });
+    }).select('+passwordHash +passwordSalt');
 
     if (!user) {
       return null;

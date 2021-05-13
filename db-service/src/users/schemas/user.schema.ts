@@ -18,10 +18,10 @@ export class User {
   @Prop()
   name: string;
 
-  @Prop()
+  @Prop({ select: false })
   passwordHash: string;
 
-  @Prop()
+  @Prop({ select: false })
   passwordSalt: string;
 
   @Prop()

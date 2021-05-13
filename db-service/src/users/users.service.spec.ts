@@ -74,11 +74,9 @@ describe('UsersService', () => {
   describe('checkLoginDetail', () => {
     it('should return null if cannot find a user', async () => {
       const loginUserDto = { username: 'username', password: 'password' };
-      const modelSpy = jest
-        .spyOn(mockUserModel, 'findOne')
-        .mockResolvedValue(null);
+      mockUserModel.findOne = jest.fn().mockReturnValueOnce({ select: () => null });
       expect(await service.checkLoginDetail(loginUserDto)).toBe(null);
-      expect(modelSpy).toBeCalled();
+      expect(mockUserModel.findOne).toBeCalled();
     });
 
     it('should return a user details if passwords match', async () => {
@@ -89,14 +87,11 @@ describe('UsersService', () => {
 
       const loginUserDto = { username: user.username, password: 'password' };
 
-      const modelSpy = jest
-        .spyOn(mockUserModel, 'findOne')
-        .mockResolvedValue(user as UserDocument);
-
+      mockUserModel.findOne = jest.fn().mockReturnValueOnce({ select: () => user });
       mockCreatePasswordHash.mockReturnValueOnce(user.passwordHash);
 
       expect(await service.checkLoginDetail(loginUserDto)).toBe(user);
-      expect(modelSpy).toBeCalled();
+      expect(mockUserModel.findOne).toBeCalled();
     });
 
     it('should raise error if passwords do not match', async () => {
@@ -107,10 +102,7 @@ describe('UsersService', () => {
 
       const loginUserDto = { username: user.username, password: 'password' };
 
-      jest
-        .spyOn(mockUserModel, 'findOne')
-        .mockResolvedValue(user as UserDocument);
-
+      mockUserModel.findOne = jest.fn().mockReturnValueOnce({ select: () => user });
       mockCreatePasswordHash.mockReturnValueOnce('anotherPasswordHash');
 
       let error;
