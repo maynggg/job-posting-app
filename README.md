@@ -26,7 +26,7 @@ Each microservice has three main modules: `companies`, `users`, and `vacancies`.
 API documentation can be found in `README.md` in each microservice - `DB-SERVICE` and `BFF`.
 
 ## Authentication
-This applications uses JSON Web Token (JWT) to handle authentication. The token needs to be passed with each request using the Authorization header with Token scheme. The Authorization header must have the form of: `Bearer [your token here]`.
+This application uses JSON Web Token (JWT) to handle authentication. The token needs to be passed with each request using the Authorization header with Token scheme. The Authorization header must have the form of: `Bearer [your token here]`.
 
 ## Authorization
 There exist two guards in `DB-SERVICE`: `CompanyGuard` and `RolesGuard`:
