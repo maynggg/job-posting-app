@@ -25,6 +25,7 @@ export class AppController {
 
     const companyCollection = db.collection('companies');
     const userCollection = db.collection('users');
+    const vacancyCollection = db.collection('vacancies');
 
     await companyCollection.insertMany([
       {
@@ -91,6 +92,25 @@ export class AppController {
     }
 
     await userCollection.insertMany(users);
+
+    const vacancies = [
+    {
+      _id: ObjectID('609ce166592baf004d24e6bc'),
+      'companyId': '5e5df7fc6953acd3dc50fe8f',
+      'title': 'Frontend Developer',
+      'description': 'Frontend development',
+      'expiredAt': '2021-10-10T10:36:40.791Z',
+    },
+    {
+      _id: ObjectID('609ce166592baf004d24e6bc'),
+      'companyId': '5e5df7fc6953acd3dc50fe8a',
+      'title': 'Backend Developer',
+      'description': 'Backend development',
+      'expiredAt': '2021-05-01T10:36:40.791Z',
+    }
+    ]
+
+    await vacancyCollection.insertMany(vacancies);
 
     await client.close();
 

@@ -58,16 +58,118 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Testing API locally
+### Authentication Header
+`Authorization: Bearer [your JWT here]`
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Endpoints
+#### Users
+1. `POST /users/signup`
+- No authentication required. 
+- Return a User.
+- Required fields: companyId, name, username, password, role.
+- Role must be enum: 'user' or 'admin'.
+- Sample request body: 
+    ```bash
+    {
+        "companyId": "5e5df7fc6953acd3dc50fe8f",
+        "name": "Jack Doe",
+        "username": "jack",
+        "password": "jack",
+        "role": "admin"
+    }
+    ```
 
-## Stay in touch
+2. `POST /users/login`
+- No authentication required. 
+- Return an access token and a User.
+- Required fields: username, password.
+- Sample request body: 
+    ```bash
+    {
+        "username": "mark",
+        "password": "mark"
+    }
+    ```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+3. `GET /users`
+- Authentication required. 
+- Return all users within this user's company.
 
-## License
+4. `GET /users/:id`
+- Authentication required. 
+- Return a user with the specified ID.
 
-Nest is [MIT licensed](LICENSE).
+#### Vacancies
+1. `GET /vacancies`
+- Authentication required. 
+- Return all job vacancies posted by this user's company.
+
+2. `GET /vacancies/:id`
+- Authentication required. 
+- Return a job vacancy with the specified ID.
+
+#### Companies
+1. `GET /companies`
+- Authentication required. 
+- Return all companies.
+
+2. `GET /companies/:id`
+- Authentication required. 
+- Return a company with the specified ID.
+
+3. `GET /companies/:companyId/users`
+- Authentication required. 
+- Return all users within a specified company.
+
+4. `GET /companies/:companyId/vacancies`
+- Authentication required. 
+- Return all job vacancies posted by a specified company.
+
+5. `POST /companies/:companyId/vacancies`
+- Authentication required.
+- Authorization required (User role must be 'admin').
+- Create a job vacancy within a specified company.
+- Return a Vacancy.
+- Required fields: title, description, expiredAt.
+- Sample request body: 
+    ```bash
+    {
+        "title": "Frontend Developer",
+        "description": "Frontend development",
+        "expiredAt": "2021-10-10T10:36:40.791Z"
+    }
+    ```
+
+6. `PATCH /companies/:companyId/vacancies/:vacancyId`
+- Authentication required.
+- Authorization required (User role must be 'admin').
+- Update a specified job vacancy within a specified company.
+- All fields are optional.
+- Return a Vacancy.
+- Sample request body: 
+    ```bash
+    {
+        "title": "Web Developer",
+        "description": "Web development"
+    }
+    ```
+
+6. `DELETE /companies/:companyId/vacancies/:vacancyId`
+- Authentication required.
+- Authorization required (User role must be 'admin').
+- Return a Vacancy.
+- Delete a specified job vacancy within a specified company.
+
+7. `POST /companies`
+- Authentication required.
+- Create a company.
+- Required fields: name, address.
+- Return a company.
+- Sample request body: 
+    ```bash
+    {
+        "name": "Google",
+        "address": "Pyrmont"
+    }
+    ```

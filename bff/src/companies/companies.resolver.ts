@@ -12,11 +12,19 @@ import { CompaniesService } from './companies.service';
 import { Vacancy } from '../models/vacancy.model';
 import { CreateVacancyArgs } from './dto/create-vacancy.args';
 import { UpdateVacancyArgs } from './dto/update-vacancy.args';
+import { CreateCompanyArgs } from './dto/create-company.args';
 
 @Injectable()
 @Resolver(() => Company)
 export class CompaniesResolver {
   constructor(private readonly companiesService: CompaniesService) {}
+
+  @Mutation(() => Company)
+  async createCompany(
+    @Args() createCompanyArgs: CreateCompanyArgs,
+  ) {
+    return this.companiesService.createCompany(createCompanyArgs);
+  }
 
   @Query(() => Company)
   async company(@Args('id', { type: () => String }) id: string) {

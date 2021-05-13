@@ -8,4 +8,4 @@ RUN npm install
 
 COPY . /app/bff/
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:dev"]

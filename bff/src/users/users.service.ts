@@ -2,6 +2,7 @@ import { HttpService, Injectable } from '@nestjs/common';
 import { AccessToken } from '../models/accessToken.model';
 import { User } from '../models/user.model';
 import { LoginArgs } from './dto/login.args';
+import { SignupArgs } from './dto/signup.args';
 
 @Injectable()
 export class UsersService {
@@ -25,6 +26,13 @@ export class UsersService {
   async login(loginArgs: LoginArgs): Promise<AccessToken> {
     const { data } = await this.httpService
       .post('/users/login', loginArgs)
+      .toPromise();
+    return data;
+  }
+
+  async signup(signupArgs: SignupArgs): Promise<User> {
+    const { data } = await this.httpService
+      .post('/users/signup', signupArgs)
       .toPromise();
     return data;
   }

@@ -6,7 +6,7 @@ export type CompanyDocument = Company & Document;
 
 @Schema()
 export class Company {
-  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  @Prop({ type: mongoose.Schema.Types.ObjectId , auto: true })
   _id: string;
 
   @Prop()

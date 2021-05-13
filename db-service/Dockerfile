@@ -8,4 +8,4 @@ RUN npm install
 
 COPY . /app/db-service/
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:dev"]

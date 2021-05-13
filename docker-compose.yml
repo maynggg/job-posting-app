@@ -18,6 +18,8 @@ services:
       - ${DB_SERVICE_PORT}:${DB_SERVICE_PORT}
     depends_on:
       - db
+    volumes:
+      - ./db-service/src:/app/db-service/src
     restart: always
   bff:
       build: ./bff
@@ -28,6 +30,8 @@ services:
       command: npm run start
       depends_on:
         - db-service
+      volumes:
+        - ./bff/src:/app/bff/src
       restart: always
 volumes:
   data-volume:

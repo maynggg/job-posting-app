@@ -12,6 +12,7 @@ import { UsersService } from './users.service';
 import { CompaniesService } from '../companies/companies.service';
 import { AccessToken } from '../models/accessToken.model';
 import { LoginArgs } from './dto/login.args';
+import { SignupArgs } from './dto/signup.args';
 
 @Injectable()
 @Resolver(() => User)
@@ -44,5 +45,10 @@ export class UsersResolver {
   @Mutation(() => AccessToken)
   async login(@Args() loginArgs: LoginArgs) {
     return this.usersService.login(loginArgs);
+  }
+
+  @Mutation(() => User)
+  async signup(@Args() signupArgs: SignupArgs) {
+    return this.usersService.signup(signupArgs);
   }
 }

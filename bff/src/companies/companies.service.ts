@@ -2,12 +2,22 @@ import { HttpService, Injectable } from '@nestjs/common';
 import { Company } from '../models/company.model';
 import { User } from '../models/user.model';
 import { Vacancy } from '../models/vacancy.model';
+import { CreateCompanyArgs } from './dto/create-company.args';
 import { CreateVacancyArgs } from './dto/create-vacancy.args';
 import { UpdateVacancyArgs } from './dto/update-vacancy.args';
 
 @Injectable()
 export class CompaniesService {
   constructor(private readonly httpService: HttpService) {}
+
+  async createCompany(
+    createCompanyArgs: CreateCompanyArgs,
+  ): Promise<Company> {
+    const { data } = await this.httpService
+      .post(`/companies/`, createCompanyArgs)
+      .toPromise();
+    return data;
+  }
 
   async findAll(): Promise<Company[]> {
     const { data } = await this.httpService.get('/companies').toPromise();
