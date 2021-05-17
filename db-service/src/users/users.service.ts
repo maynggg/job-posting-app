@@ -65,9 +65,11 @@ export class UsersService {
   async checkLoginDetail(loginUserDto: LoginUserDto): Promise<User> {
     const { username, password } = loginUserDto;
 
-    const user = await this.userModel.findOne({
-      username: username,
-    }).select('+passwordHash +passwordSalt');
+    const user = await this.userModel
+      .findOne({
+        username: username,
+      })
+      .select('+passwordHash +passwordSalt');
 
     if (!user) {
       return null;

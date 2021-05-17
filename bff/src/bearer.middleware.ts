@@ -7,9 +7,6 @@ export class BearerMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     this.httpService.axiosRef.defaults.headers.common['authorization'] =
       req.headers.authorization;
-    this.httpService.axiosRef.defaults.baseURL = process.env.DB_SERVICE_BASE_URL
-      ? `${process.env.DB_SERVICE_BASE_URL}:${process.env.DB_SERVICE_PORT}`
-      : 'http://localhost:3001';
     next();
   }
 }

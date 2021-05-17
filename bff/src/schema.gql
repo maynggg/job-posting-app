@@ -44,9 +44,9 @@ type Query {
 
 type Mutation {
   createCompany(name: String!, address: String!): Company!
-  createVacancy(title: String!, description: String!, expiredAt: String!, companyId: String!): Vacancy!
-  updateVacancy(title: String, description: String, expiredAt: String, vacancyId: String!, companyId: String!): Vacancy!
-  deleteVacancy(vacancyId: String!, companyId: String!): Vacancy!
   login(username: String!, password: String!): AccessToken!
   signup(companyId: String!, name: String!, username: String!, password: String!, role: String!): User!
+  createVacancy(companyId: String!, title: String!, description: String!, expiredAt: String!): Vacancy!
+  updateVacancy(title: String, description: String, expiredAt: String, vacancyId: String!): Vacancy!
+  deleteVacancy(vacancyId: String!): Vacancy!
 }

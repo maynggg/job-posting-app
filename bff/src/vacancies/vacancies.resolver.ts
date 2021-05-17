@@ -1,8 +1,17 @@
-import { Resolver, Query, ResolveField, Parent, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  ResolveField,
+  Parent,
+  Args,
+  Mutation,
+} from '@nestjs/graphql';
 import { Injectable } from '@nestjs/common';
 import { Vacancy } from '../models/vacancy.model';
 import { VacanciesService } from './vacancies.service';
 import { CompaniesService } from '../companies/companies.service';
+import { CreateVacancyArgs } from './dto/create-vacancy.args';
+import { UpdateVacancyArgs } from './dto/update-vacancy.args';
 
 @Injectable()
 @Resolver(() => Vacancy)
@@ -25,5 +34,25 @@ export class VacanciesResolver {
   @ResolveField()
   async company(@Parent() vacancy: Vacancy) {
     return this.companiesService.findById(vacancy.companyId);
+  }
+
+  @Mutation(() => Vacancy)
+  async createVacancy(@Args() createVacancyArgs: CreateVacancyArgs) {
+    return this.vacanciesService.createVacancy(createVacancyArgs);
+  }
+
+  @Mutation(() => Vacancy)
+  async updateVacancy(
+    @Args('vacancyId', { type: () => String }) vacancyId: string,
+    @Args() updateVacancyArgs: UpdateVacancyArgs,
+  ) {
+    return this.vacanciesService.updateVacancy(vacancyId, updateVacancyArgs);
+  }
+
+  @Mutation(() => Vacancy)
+  async deleteVacancy(
+    @Args('vacancyId', { type: () => String }) vacancyId: string,
+  ) {
+    return this.vacanciesService.deleteVacancy(vacancyId);
   }
 }

@@ -9,20 +9,21 @@ import {
 import { Injectable } from '@nestjs/common';
 import { Company } from '../models/company.model';
 import { CompaniesService } from './companies.service';
-import { Vacancy } from '../models/vacancy.model';
-import { CreateVacancyArgs } from './dto/create-vacancy.args';
-import { UpdateVacancyArgs } from './dto/update-vacancy.args';
 import { CreateCompanyArgs } from './dto/create-company.args';
+import { UsersService } from '../users/users.service';
+import { VacanciesService } from '../vacancies/vacancies.service';
 
 @Injectable()
 @Resolver(() => Company)
 export class CompaniesResolver {
-  constructor(private readonly companiesService: CompaniesService) {}
+  constructor(
+    private readonly companiesService: CompaniesService,
+    private readonly usersService: UsersService,
+    private readonly vacanciesService: VacanciesService,
+  ) {}
 
   @Mutation(() => Company)
-  async createCompany(
-    @Args() createCompanyArgs: CreateCompanyArgs,
-  ) {
+  async createCompany(@Args() createCompanyArgs: CreateCompanyArgs) {
     return this.companiesService.createCompany(createCompanyArgs);
   }
 
@@ -38,40 +39,11 @@ export class CompaniesResolver {
 
   @ResolveField()
   async users(@Parent() company: Company) {
-    return this.companiesService.getUsers(company._id);
+    return this.usersService.findByCompanyId(company._id);
   }
 
   @ResolveField()
   async vacancies(@Parent() company: Company) {
-    return this.companiesService.getVacancies(company._id);
-  }
-
-  @Mutation(() => Vacancy)
-  async createVacancy(
-    @Args('companyId', { type: () => String }) companyId: string,
-    @Args() createVacancyArgs: CreateVacancyArgs,
-  ) {
-    return this.companiesService.createVacancy(companyId, createVacancyArgs);
-  }
-
-  @Mutation(() => Vacancy)
-  async updateVacancy(
-    @Args('companyId', { type: () => String }) companyId: string,
-    @Args('vacancyId', { type: () => String }) vacancyId: string,
-    @Args() updateVacancyArgs: UpdateVacancyArgs,
-  ) {
-    return this.companiesService.updateVacancy(
-      companyId,
-      vacancyId,
-      updateVacancyArgs,
-    );
-  }
-
-  @Mutation(() => Vacancy)
-  async deleteVacancy(
-    @Args('companyId', { type: () => String }) companyId: string,
-    @Args('vacancyId', { type: () => String }) vacancyId: string,
-  ) {
-    return this.companiesService.deleteVacancy(companyId, vacancyId);
+    return this.vacanciesService.findByCompanyId(company._id);
   }
 }
