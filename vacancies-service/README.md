@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository for the BFF microservices.
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
 
@@ -59,102 +59,54 @@ $ npm run test:cov
 ```
 
 ## Testing API locally
-Open `http://localhost:<BFF_PORT>/graphql` to test API locally.
-
 ### Authentication Header
 `Authorization: Bearer [your JWT here]`
 
-### Documentation
-Open `schema_doc/index.html` to see the full GraphQL Schema documentation.
-
-### Sample request body
-#### Users
-  ```bash
-  query {
-    users {
-      _id,
-      name,
-      username,
-      role,
-      company {
-        _id,
-        name,
-        address
-      }
-    }
-  }
-  ```
-
-  ```bash
-  mutation {
-    login(username: "bob", password: "bob") {
-      accessToken
-    }
-  }
-  ```
-
-#### Companies
-  ```bash
-  query {
-    companies {
-      _id,
-      name,
-      address,
-      users {
-        _id,
-        name,
-        username,
-        role
-      },
-      vacancies {
-        _id,
-        title,
-        description,
-        expiredAt
-      }
-    }
-  }
-  ```
-
-  ```bash
-  mutation {
-    createCompany(name: "PredictiveHire", address: "15 Newton St") {
-      _id,
-      name,
-      address
-    }
-  }
-  ```
-
+### Endpoints
 #### Vacancies
-  ```bash
-  query {
-    vacancies {
-       _id,
-      title,
-      description,
-      expiredAt,
-      company {
-        _id,
-        name,
-        address
-      }
-    }
-  }
-  ```
+1. `GET /vacancies`
+- Authentication required. 
+- Return all job vacancies.
 
-  ```bash
-  mutation {
-    createVacancy(companyId: "6094e318328e51e47adbfe27", title: "Mobile developer", description: "Mobile developer description", expiredAt: "2021-05-31T10:36:40.791Z") {
-    _id,
-    title,
-    description,
-    expiredAt,
-    company {
-      _id,
-      name,
-      address
+2. `GET /vacancies/:id`
+- Authentication required. 
+- Return a job vacancy with the specified ID.
+
+3. `POST /vacancies`
+- Authentication required.
+- Authorization required (User role must be 'admin', the company must exist, user can only create a vacancy for his/her own company).
+- Create a job vacancy.
+- Return a Vacancy.
+- Required fields: title, description, expiredAt.
+- Sample request body: 
+    ```bash
+    {
+        "title": "Frontend Developer",
+        "description": "Frontend development",
+        "expiredAt": "2021-10-10T10:36:40.791Z"
     }
+    ```
+
+4. `PATCH /:vacancyId`
+- Authentication required.
+- Authorization required (User role must be 'admin', user can only update a vacancy of his/her own company).
+- Update a specified job vacancy.
+- All fields are optional.
+- Return a Vacancy.
+- Sample request body: 
+    ```bash
+    {
+        "title": "Web Developer",
+        "description": "Web development"
     }
-  }
-  ```
+    ```
+
+5. `DELETE /:vacancyId`
+- Authentication required.
+- Authorization required (User role must be 'admin', user can only delete a vacancy of his/her own company).
+- Return a Vacancy.
+- Delete a specified job vacancy.
+
+6. `GET /vacancies?companyId="5e5df7fc6953acd3dc50fe8f"`
+- Authentication required. 
+- Return all vacancies within a specified company.

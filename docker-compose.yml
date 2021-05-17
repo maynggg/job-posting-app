@@ -10,17 +10,55 @@ services:
     restart: always
     volumes:
       - data-volume:/data/db
-  db-service:
-    build: ./db-service
+
+  seed-service:
+    build: ./seed-service
     env_file:
       - .env
     ports:
-      - ${DB_SERVICE_PORT}:${DB_SERVICE_PORT}
+      - ${SEED_SERVICE_PORT}:${SEED_SERVICE_PORT}
     depends_on:
       - db
     volumes:
-      - ./db-service/src:/app/db-service/src
+      - ./seed-service/src:/app/seed-service/src
     restart: always
+
+  users-service:
+    build: ./users-service
+    env_file:
+      - .env
+    ports:
+      - ${USERS_SERVICE_PORT}:${USERS_SERVICE_PORT}
+    depends_on:
+      - db
+    volumes:
+      - ./users-service/src:/app/users-service/src
+    restart: always
+
+  companies-service:
+    build: ./companies-service
+    env_file:
+      - .env
+    ports:
+      - ${COMPANIES_SERVICE_PORT}:${COMPANIES_SERVICE_PORT}
+    depends_on:
+      - db
+    volumes:
+      - ./companies-service/src:/app/companies-service/src
+    restart: always
+
+  vacancies-service:
+    build: ./vacancies-service
+    env_file:
+      - .env
+    ports:
+      - ${VACANCIES_SERVICE_PORT}:${VACANCIES_SERVICE_PORT}
+    depends_on:
+      - db
+    volumes:
+      - ./vacancies-service/src:/app/vacancies-service/src
+    restart: always
+
   bff:
       build: ./bff
       env_file:
@@ -29,9 +67,13 @@ services:
         - ${BFF_PORT}:${BFF_PORT}
       command: npm run start
       depends_on:
-        - db-service
+        - seed-service
+        - users-service
+        - companies-service
+        - vacancies-service
       volumes:
         - ./bff/src:/app/bff/src
       restart: always
+
 volumes:
   data-volume:

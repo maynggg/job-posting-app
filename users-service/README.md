@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository for the BFF microservices.
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
 
@@ -59,102 +59,51 @@ $ npm run test:cov
 ```
 
 ## Testing API locally
-Open `http://localhost:<BFF_PORT>/graphql` to test API locally.
-
 ### Authentication Header
 `Authorization: Bearer [your JWT here]`
 
-### Documentation
-Open `schema_doc/index.html` to see the full GraphQL Schema documentation.
-
-### Sample request body
+### Endpoints
 #### Users
-  ```bash
-  query {
-    users {
-      _id,
-      name,
-      username,
-      role,
-      company {
-        _id,
-        name,
-        address
-      }
+1. `POST /users/signup`
+- No authentication required. 
+- Return a User.
+- Required fields: companyId, name, username, password, role.
+- Role must be enum: 'user' or 'admin'.
+- Sample request body: 
+    ```bash
+    {
+        "companyId": "5e5df7fc6953acd3dc50fe8f",
+        "name": "Jack Doe",
+        "username": "jack",
+        "password": "jack",
+        "role": "admin"
     }
-  }
-  ```
+    ```
 
-  ```bash
-  mutation {
-    login(username: "bob", password: "bob") {
-      accessToken
+2. `POST /users/login`
+- No authentication required. 
+- Return an access token and a User.
+- Required fields: username, password.
+- Sample request body: 
+    ```bash
+    {
+        "username": "mark",
+        "password": "mark"
     }
-  }
-  ```
+    ```
 
-#### Companies
-  ```bash
-  query {
-    companies {
-      _id,
-      name,
-      address,
-      users {
-        _id,
-        name,
-        username,
-        role
-      },
-      vacancies {
-        _id,
-        title,
-        description,
-        expiredAt
-      }
-    }
-  }
-  ```
+3. `GET /users`
+- Authentication required. 
+- Return all users.
 
-  ```bash
-  mutation {
-    createCompany(name: "PredictiveHire", address: "15 Newton St") {
-      _id,
-      name,
-      address
-    }
-  }
-  ```
+4. `GET /users/:id`
+- Authentication required. 
+- Return a user with the specified ID.
 
-#### Vacancies
-  ```bash
-  query {
-    vacancies {
-       _id,
-      title,
-      description,
-      expiredAt,
-      company {
-        _id,
-        name,
-        address
-      }
-    }
-  }
-  ```
+5. `GET /users/me`
+- Authentication required. 
+- Return this user's details.
 
-  ```bash
-  mutation {
-    createVacancy(companyId: "6094e318328e51e47adbfe27", title: "Mobile developer", description: "Mobile developer description", expiredAt: "2021-05-31T10:36:40.791Z") {
-    _id,
-    title,
-    description,
-    expiredAt,
-    company {
-      _id,
-      name,
-      address
-    }
-    }
-  }
-  ```
+6. `GET /users?companyId="5e5df7fc6953acd3dc50fe8f"`
+- Authentication required. 
+- Return all users within a specified company.

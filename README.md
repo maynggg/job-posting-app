@@ -12,11 +12,17 @@ This project aims to replicate basic functionalities of a job posting web applic
 1. Install Docker. See this [link](https://docs.docker.com/docker-for-mac/install/) for installation guide on Mac OS.
 2. Set the working directory to this repo `$ cd job-posting-app`.
 3. Create a `.env` file and add the necessary environment variables. See `.env.example` for example.
-4. Run the development server and web app by running this command: `$ docker-compose -f docker-compose.yml up --build`. Both app will be available at your chosen port in `.env`.
-5. Make a `POST` request to the following URL to generate seed data: `http://<DB_SERVICE_BASE_URL>:<DB_SERVICE_PORT>/seed`. CAUTION: doing this will drop the database and recreate  the seed data. Seed data can be viewed in `db-service/src/app.controller.ts`.
+4. Run the development servers by running this command: `$ docker-compose -f docker-compose.yml up --build`. All apps will be available at your chosen port in `.env`.
+5. Make a `POST` request to the following URL to generate seed data: `http://localhost:<SEED_SERVICE_PORT>/seed`. CAUTION: doing this will drop the database and recreate  the seed data. 
+Seed data can be viewed in `seed-service/src/app.controller.ts`.
 
 ## Project Structure
-Three microservices were built for this application: `vacancies-services`, `companies-services`, and `users-services`.
+Five microservices were built for this application: 
+- `vacancies-services` for handling services related to vacancies.
+- `companies-services` for handling services related to companies.
+- `users-services` for handling services related to users.
+- `seed-service` to generate seed data.
+- `bff` for handling backend for frontend API services.
 
 
 ## API Documentation

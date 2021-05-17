@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository for the BFF microservices.
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository for the REST API microservices.
 
 ## Installation
 
@@ -57,104 +57,9 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
 ## Testing API locally
-Open `http://localhost:<BFF_PORT>/graphql` to test API locally.
 
-### Authentication Header
-`Authorization: Bearer [your JWT here]`
-
-### Documentation
-Open `schema_doc/index.html` to see the full GraphQL Schema documentation.
-
-### Sample request body
-#### Users
-  ```bash
-  query {
-    users {
-      _id,
-      name,
-      username,
-      role,
-      company {
-        _id,
-        name,
-        address
-      }
-    }
-  }
-  ```
-
-  ```bash
-  mutation {
-    login(username: "bob", password: "bob") {
-      accessToken
-    }
-  }
-  ```
-
-#### Companies
-  ```bash
-  query {
-    companies {
-      _id,
-      name,
-      address,
-      users {
-        _id,
-        name,
-        username,
-        role
-      },
-      vacancies {
-        _id,
-        title,
-        description,
-        expiredAt
-      }
-    }
-  }
-  ```
-
-  ```bash
-  mutation {
-    createCompany(name: "PredictiveHire", address: "15 Newton St") {
-      _id,
-      name,
-      address
-    }
-  }
-  ```
-
-#### Vacancies
-  ```bash
-  query {
-    vacancies {
-       _id,
-      title,
-      description,
-      expiredAt,
-      company {
-        _id,
-        name,
-        address
-      }
-    }
-  }
-  ```
-
-  ```bash
-  mutation {
-    createVacancy(companyId: "6094e318328e51e47adbfe27", title: "Mobile developer", description: "Mobile developer description", expiredAt: "2021-05-31T10:36:40.791Z") {
-    _id,
-    title,
-    description,
-    expiredAt,
-    company {
-      _id,
-      name,
-      address
-    }
-    }
-  }
-  ```
+### Endpoints
+`POST /seed`
+- No authentication required. 
+- Generate seed data.
