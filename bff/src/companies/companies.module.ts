@@ -1,8 +1,8 @@
 import { HttpModule, Module, forwardRef } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CompaniesResolver } from './companies.resolver';
-import { UsersModule } from 'src/users/users.module';
-import { VacanciesModule } from 'src/vacancies/vacancies.module';
+import { UsersModule } from '../users/users.module';
+import { VacanciesModule } from '../vacancies/vacancies.module';
 
 @Module({
   imports: [

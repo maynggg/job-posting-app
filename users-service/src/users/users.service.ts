@@ -26,9 +26,8 @@ export class UsersService {
     });
 
     if (user) {
-      const errors = { username: 'Username must be unique.' };
       throw new HttpException(
-        { message: 'Input data validation failed', errors },
+        'Username must be unique',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -76,8 +75,7 @@ export class UsersService {
     const passwordHash = pw.createPasswordHash(password, user.passwordSalt);
 
     if (passwordHash !== user.passwordHash) {
-      const errors = { User: 'Wrong email or password.' };
-      throw new HttpException({ errors }, 401);
+      throw new HttpException('Wrong email or password', HttpStatus.NOT_FOUND);
     }
 
     return user;

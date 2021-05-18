@@ -55,7 +55,7 @@ export class VacanciesController {
 
     // Can only create new vacancy for user's own company
     if (createVacancyDto.companyId != req.user.companyId) {
-      throw new HttpException('Not authorized.', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Not authorized.', HttpStatus.FORBIDDEN);
     }
     return this.vacanciesService.create(createVacancyDto);
   }
@@ -73,7 +73,7 @@ export class VacanciesController {
 
     // Can only update the vacancy that belongs to user's own company
     if (companyId !== req.user.companyId) {
-      throw new HttpException('Not authorized.', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Not authorized.', HttpStatus.FORBIDDEN);
     }
     return this.vacanciesService.update(vacancyId, updateVacancyDto);
   }
@@ -90,7 +90,7 @@ export class VacanciesController {
 
     // Can only delete the vacancy that belongs to user's own company
     if (companyId !== req.user.companyId) {
-      throw new HttpException('Not authorized.', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Not authorized.', HttpStatus.FORBIDDEN);
     }
     return this.vacanciesService.remove(vacancyId);
   }

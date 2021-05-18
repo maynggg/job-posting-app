@@ -45,13 +45,14 @@ describe('VacanciesService', () => {
 
   describe('findAll', () => {
     it('should return all vacancies', async () => {
+      const query = { query: 'query' };
       const vacancies = [new Vacancy()];
       const spy = jest
         .spyOn(mockVacancyModel, 'find')
         .mockResolvedValue(vacancies as VacancyDocument[]);
 
-      expect(await service.findAll()).toBe(vacancies);
-      expect(spy).toBeCalled();
+      expect(await service.findAll(query)).toBe(vacancies);
+      expect(spy).toBeCalledWith(query);
     });
   });
 
@@ -90,19 +91,6 @@ describe('VacanciesService', () => {
       expect(await service.update(vacancyId, updateDto)).toBe(updatedVacancy);
       expect(findById).toBeCalledWith(vacancyId);
       expect(findOneAndUpdate).toBeCalled();
-    });
-  });
-
-  describe('findByCompanyId', () => {
-    it('should find all vacancies of a company', async () => {
-      const vacancies = [new Vacancy()];
-      const companyId = '5e5df7fc6953acd3dc50fe8f';
-      const spy = jest
-        .spyOn(mockVacancyModel, 'find')
-        .mockResolvedValue(vacancies as VacancyDocument[]);
-
-      expect(await service.findByCompanyId(companyId)).toBe(vacancies);
-      expect(spy).toBeCalled();
     });
   });
 });

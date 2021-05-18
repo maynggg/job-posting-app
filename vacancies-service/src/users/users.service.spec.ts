@@ -1,118 +1,53 @@
-import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { User, UserDocument } from './schemas/user.schema';
 import { UsersService } from './users.service';
-import { Model } from 'mongoose';
-import * as pw from '../users/password';
-
-jest.mock('../users/password');
-const mockCreatePasswordHash = pw.createPasswordHash as jest.MockedFunction<
-  typeof pw.createPasswordHash
->;
+import { HttpModule, HttpService } from '@nestjs/common';
 
 describe('UsersService', () => {
   let service: UsersService;
-  let mockUserModel: Model<UserDocument>;
+  let httpService: HttpService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        UsersService,
-        {
-          provide: getModelToken(User.name),
-          useValue: Model,
-        },
-      ],
+      imports: [HttpModule],
+      providers: [UsersService],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-    mockUserModel = module.get<Model<UserDocument>>(getModelToken(User.name));
+    httpService = module.get<HttpService>(HttpService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  describe('findById', () => {
-    it('should return a user with the specified ID', async () => {
-      const user = new User();
-      const userId = '12345';
+  describe('getMyInfo', () => {
+    it('should return user information', async () => {
+      const user = {
+        id: 'id',
+        name: 'name',
+        username: 'username',
+        password: 'password',
+        role: 'role',
+      };
+
+      const response = {
+        data: user,
+        headers: {},
+        config: { url: 'http://localhost:3000/mockUrl' },
+        status: 200,
+        statusText: 'OK',
+      };
+
+      const observableObj = {
+        toPromise: () => response,
+      };
+
       const spy = jest
-        .spyOn(mockUserModel, 'findById')
-        .mockResolvedValue(user as UserDocument);
+        .spyOn(httpService, 'get')
+        .mockReturnValueOnce(observableObj as any);
 
-      expect(await service.findById(userId)).toBe(user);
-      expect(spy).toBeCalledWith(userId);
-    });
-  });
-
-  describe('findAll', () => {
-    it('should return all users', async () => {
-      const users = [new User()];
-      const spy = jest
-        .spyOn(mockUserModel, 'find')
-        .mockResolvedValue(users as UserDocument[]);
-
-      expect(await service.findAll()).toBe(users);
+      expect(await service.getMyInfo()).toBe(response.data);
       expect(spy).toBeCalled();
-    });
-  });
-
-  describe('findByCompanyId', () => {
-    it('should return all users within a company', async () => {
-      const users = [new User()];
-      const companyId = '5e5df7fc6953acd3dc50fe8f';
-      const spy = jest
-        .spyOn(mockUserModel, 'find')
-        .mockResolvedValue(users as UserDocument[]);
-
-      expect(await service.findByCompanyId(companyId)).toBe(users);
-      expect(spy).toBeCalled();
-    });
-  });
-
-  describe('checkLoginDetail', () => {
-    it('should return null if cannot find a user', async () => {
-      const loginUserDto = { username: 'username', password: 'password' };
-      mockUserModel.findOne = jest.fn().mockReturnValueOnce({ select: () => null });
-      expect(await service.checkLoginDetail(loginUserDto)).toBe(null);
-      expect(mockUserModel.findOne).toBeCalled();
-    });
-
-    it('should return a user details if passwords match', async () => {
-      const user = new User();
-      user.username = 'username';
-      user.passwordHash = 'passwordHash';
-      user.passwordSalt = 'passwordSalt';
-
-      const loginUserDto = { username: user.username, password: 'password' };
-
-      mockUserModel.findOne = jest.fn().mockReturnValueOnce({ select: () => user });
-      mockCreatePasswordHash.mockReturnValueOnce(user.passwordHash);
-
-      expect(await service.checkLoginDetail(loginUserDto)).toBe(user);
-      expect(mockUserModel.findOne).toBeCalled();
-    });
-
-    it('should raise error if passwords do not match', async () => {
-      const user = new User();
-      user.username = 'username';
-      user.passwordHash = 'passwordHash';
-      user.passwordSalt = 'passwordSalt';
-
-      const loginUserDto = { username: user.username, password: 'password' };
-
-      mockUserModel.findOne = jest.fn().mockReturnValueOnce({ select: () => user });
-      mockCreatePasswordHash.mockReturnValueOnce('anotherPasswordHash');
-
-      let error;
-      try {
-        await service.checkLoginDetail(loginUserDto);
-      } catch (e) {
-        error = e;
-      }
-
-      expect(error.getStatus()).toBe(401);
     });
   });
 });

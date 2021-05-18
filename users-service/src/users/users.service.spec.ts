@@ -4,11 +4,15 @@ import { User, UserDocument } from './schemas/user.schema';
 import { UsersService } from './users.service';
 import { Model } from 'mongoose';
 import * as pw from '../users/password';
+import * as jwt from 'jsonwebtoken';
 
 jest.mock('../users/password');
 const mockCreatePasswordHash = pw.createPasswordHash as jest.MockedFunction<
   typeof pw.createPasswordHash
 >;
+
+jest.mock('jsonwebtoken');
+const mockJwtSign = jwt.sign as jest.MockedFunction<typeof jwt.sign>;
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -48,33 +52,23 @@ describe('UsersService', () => {
 
   describe('findAll', () => {
     it('should return all users', async () => {
+      const query = { query: 'query' };
       const users = [new User()];
       const spy = jest
         .spyOn(mockUserModel, 'find')
         .mockResolvedValue(users as UserDocument[]);
 
-      expect(await service.findAll()).toBe(users);
-      expect(spy).toBeCalled();
-    });
-  });
-
-  describe('findByCompanyId', () => {
-    it('should return all users within a company', async () => {
-      const users = [new User()];
-      const companyId = '5e5df7fc6953acd3dc50fe8f';
-      const spy = jest
-        .spyOn(mockUserModel, 'find')
-        .mockResolvedValue(users as UserDocument[]);
-
-      expect(await service.findByCompanyId(companyId)).toBe(users);
-      expect(spy).toBeCalled();
+      expect(await service.findAll(query)).toBe(users);
+      expect(spy).toBeCalledWith(query);
     });
   });
 
   describe('checkLoginDetail', () => {
     it('should return null if cannot find a user', async () => {
       const loginUserDto = { username: 'username', password: 'password' };
-      mockUserModel.findOne = jest.fn().mockReturnValueOnce({ select: () => null });
+      mockUserModel.findOne = jest
+        .fn()
+        .mockReturnValueOnce({ select: () => null });
       expect(await service.checkLoginDetail(loginUserDto)).toBe(null);
       expect(mockUserModel.findOne).toBeCalled();
     });
@@ -87,7 +81,9 @@ describe('UsersService', () => {
 
       const loginUserDto = { username: user.username, password: 'password' };
 
-      mockUserModel.findOne = jest.fn().mockReturnValueOnce({ select: () => user });
+      mockUserModel.findOne = jest
+        .fn()
+        .mockReturnValueOnce({ select: () => user });
       mockCreatePasswordHash.mockReturnValueOnce(user.passwordHash);
 
       expect(await service.checkLoginDetail(loginUserDto)).toBe(user);
@@ -102,17 +98,26 @@ describe('UsersService', () => {
 
       const loginUserDto = { username: user.username, password: 'password' };
 
-      mockUserModel.findOne = jest.fn().mockReturnValueOnce({ select: () => user });
+      mockUserModel.findOne = jest
+        .fn()
+        .mockReturnValueOnce({ select: () => user });
       mockCreatePasswordHash.mockReturnValueOnce('anotherPasswordHash');
 
-      let error;
       try {
         await service.checkLoginDetail(loginUserDto);
-      } catch (e) {
-        error = e;
+      } catch (error) {
+        expect(error.status).toBe(404);
       }
+    });
+  });
 
-      expect(error.getStatus()).toBe(401);
+  describe('createAuthToken', () => {
+    it('should return an access token', async () => {
+      const user = new User();
+      const token = '1234';
+      mockJwtSign.mockReturnValueOnce(token);
+      expect(await service.createAuthToken(user)).toBe(token);
+      expect(mockUserModel.findOne).toBeCalled();
     });
   });
 });

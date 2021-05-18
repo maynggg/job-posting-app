@@ -6,6 +6,7 @@ import {
   Param,
   Request,
   Query,
+  HttpStatus,
 } from '@nestjs/common';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 
@@ -32,8 +33,7 @@ export class UsersController {
   async login(@Body() loginUserDto: LoginUserDto) {
     const user: User = await this.usersService.checkLoginDetail(loginUserDto);
     if (!user) {
-      const errors = { message: 'User not found' };
-      throw new HttpException({ errors }, 401);
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
     const accessToken: string = this.usersService.createAuthToken(user);
